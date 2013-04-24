@@ -52,4 +52,6 @@ public interface IParentService {
 	public ArrayList<QuestionTO> getSecurityQuestionForUser(String username);
 	public boolean validateAnswers(String userName,String ans1, String ans2,String ans3,String questionId1,String questionId2,String questionId3);
 	public List<UserTO> getUserNamesByEmail(String emailId);
+	
+	public boolean regenerateActivationCode(StudentTO student) throws Exception;
 }

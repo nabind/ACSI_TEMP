@@ -53,4 +53,7 @@ public interface IParentDAO {
 	public ArrayList<QuestionTO> getSecurityQuestionForUser(String username);
 	public boolean validateAnswers(String userName,String ans1, String ans2,String ans3,String questionId1,String questionId2,String questionId3);
 	public List<UserTO> getUserNamesByEmail(String emailId);
+	
+	public boolean generateActivationCode(StudentTO student) throws Exception;
+	public boolean disableActivationCode(StudentTO student) throws Exception;
 }

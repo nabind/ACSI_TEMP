@@ -1006,4 +1006,32 @@ public class ParentDAOImpl extends BaseDAO implements IParentDAO {
 			}
 		});
 	}
+	
+	/**
+	 * Insert new Invitation code
+	 * 
+	 * @return boolean
+	 */
+	public boolean generateActivationCode(StudentTO student) {
+		int count = getJdbcTemplatePrism().update(
+				IQueryConstants.ADD_NEW_INVITATION_CODE, student.getInvitationcode(), student.getStudentBioId());
+		if (count > 0) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+	
+	/**
+	 * disable Invitation code
+	 * 
+	 * @return boolean
+	 */
+	public boolean disableActivationCode(StudentTO student) {
+		int count = getJdbcTemplatePrism().update(
+				IQueryConstants.UPDATE_ACTIVATION_CODE, student.getInvitationcode(), student.getStudentBioId());
+		if (count > 0) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
 }

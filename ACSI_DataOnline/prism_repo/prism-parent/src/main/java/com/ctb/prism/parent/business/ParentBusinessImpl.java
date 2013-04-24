@@ -147,4 +147,12 @@ public class ParentBusinessImpl implements IParentBusiness {
 	{
 		return parentDAO.getUserNamesByEmail(emailId);
 	}
+	
+	public boolean regenerateActivationCode(StudentTO student) throws Exception {
+		if(parentDAO.generateActivationCode(student)) {
+			return parentDAO.disableActivationCode(student);
+		} else {
+			return false;
+		}
+	}
 }

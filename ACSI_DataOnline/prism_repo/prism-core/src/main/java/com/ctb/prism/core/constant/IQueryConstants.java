@@ -1076,5 +1076,15 @@ public interface IQueryConstants {
     
     public static final String UPDATE_PARENT_USER_ORG = "Update Users Set Org_Id = (Select o.level3_jasper_orgid From Invitation_Code i,org_node_dim o  Where i.Activation_Status = 'AC' And i.Invitation_Code = ? And i.ORG_NODEID =o.org_nodeid And Rownum = 1) Where Upper(Username) = Upper(?)";
 
+    public static final String UPDATE_ACTIVATION_CODE = CustomStringUtil.appendString(
+			"UPDATE INVITATION_CODE IC SET  IC.ACTIVATION_STATUS = 'IN', IC.UPDATED_DATE_TIME = sysdate",
+            " WHERE IC.INVITATION_CODE = ? AND IC.ACTIVATION_STATUS = 'AC' ",
+            " AND IC.STUDENT_STRUC_ELEMENT = (SELECT STD.STRUCTURE_ELEMENT  FROM STUDENT_BIO_DIM STD WHERE STD.STUDENT_BIO_ID = ?)");
+    
+    public static final String ADD_NEW_INVITATION_CODE =  CustomStringUtil.appendString(
+			"insert into INVITATION_CODE",
+				  " select NVITATION_CODE_ID_SEQ.Nextval, (select sf_gen_invite_code from DUAL), student_struc_element, total_available_ic_claim, total_attempt_ic_claim, org_nodeid, adminid, invitation_expiration_date, 'AC', created_by_id, sysdate, sysdate, 'N'", 
+				  " from INVITATION_CODE",
+				  " where invitation_code = ? and activation_status = 'AC' AND STUDENT_STRUC_ELEMENT = (SELECT STD.STRUCTURE_ELEMENT  FROM STUDENT_BIO_DIM STD WHERE STD.STUDENT_BIO_ID = ?) ");
 }
 

@@ -15,6 +15,7 @@ $(document).ready(function() {
 			$(".shortcut-agenda").parent().addClass("current");
 			$('.clearfix').addClass('menu-hidden');
 			$('.view-Assessment').live("click", function() {
+				regenerateAC = false;
 				openModalToViewAssessments($(this).attr("id"));		
 			});	
 			//$('input#lastStudentId').val("");//clearing the value on load.
@@ -73,12 +74,12 @@ $(document).ready(function() {
 	});
 		
 		
-
+var regenerateAC=false;
 
 
 function openModalToViewAssessments(studentBioId) {
 	var nodeid = "studentBioId=" + studentBioId;	
-	
+	blockUI();
 	$.ajax({
 			type : "GET",
 			url : "getStudentAssessmentList.do",
@@ -86,6 +87,7 @@ function openModalToViewAssessments(studentBioId) {
 			dataType : 'json',
 			cache:false,
 			success : function(data) {
+				unblockUI();
 				if(data.status != 'Blank') {
 				//=========OPEN THE MODAL========
 				$("#studentModal").modal({
@@ -102,8 +104,14 @@ function openModalToViewAssessments(studentBioId) {
 									win.closeModal();
 								}
 							},
+							'Re-set Activation Code': {
+								classes: 'orange-gradient glossy',						
+								click: function(win) {
+									confirmRecreationAC(1);
+								}
+							},
 							'Create Letter':{
-								classes: 'blue-gradient glossy',
+								classes: 'blue-gradient glossy createLetter',
 								click: function(win) {
 									window.open('download.do'+'?type=pdf'+'&token=0&reportUrl=/public/PN/Reports/Invitation_Pdf_files&drillDown=true&assessmentId=105_InvLetter&p_Student_Bio_Id='+studentBioId);
 								}
@@ -116,6 +124,7 @@ function openModalToViewAssessments(studentBioId) {
 			},
 			error : function(data) {
 				$.modal.alert(strings['script.common.error1']);
+				unblockUI();
 			}
 		});
 			
@@ -130,7 +139,7 @@ function buildAssessmentTableDom(jsonData,modalId,modalContainerDivId)
 	var rowCounter=1;
 	$("#"+modalId +" > "+"#"+modalContainerDivId + ">" +"p.message").remove();
 	$("#"+modalId +" > "+"#"+modalContainerDivId ).find("table").remove();
-	var makeViewAssessmentTableDom = '<table id="assessmentTable" class="table " style="width:900px">'
+	var makeViewAssessmentTableDom = '<table id="assessmentTable" class="table " style="width:940px">'
 									+'<thead class ="table-header glossy ">'
 									+'<tr >'
 									+'<th scope="col" class="blue-gradient glossy"><span class="white">Available Assessments</span></th>'
@@ -167,9 +176,61 @@ function buildAssessmentTableDom(jsonData,modalId,modalContainerDivId)
 	makeViewAssessmentTableDom += '</tbody></table>';
 	$("#"+modalId+ " > "+"#"+modalContainerDivId ).append(makeViewAssessmentTableDom);	
 		
-		
+	if(regenerateAC) {
+		$("#invitationcode"+globalcounter).addClass("orange-bg");
+		$("#invitationcode"+globalcounter).css('box-shadow', '0 0 30px orange');
+		$(".createLetter").css('box-shadow', '0 0 15px blue');
+		notify('Activation Code Refreshed', 'The old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active. <br/><br/>Please refresh \'Manage Student\' screen to view updated \'Parent User ID\' column.', {
+			autoClose: true,
+			closeDelay:10000,
+			delay: 100,
+			showCloseOnHover:false,
+			textOneSimilar:'Activation Code Regenated!',
+			textSeveralSimilars:'Activation Code Regenated!',
+			icon: 'themes/acsi/img/demo/icon.png',
+			onDisplay: function() {
+				$(".createLetter").css('box-shadow', '0 0 15px blue');
+			}
+		});
+	}	
 
 }
+
+//======================================= REGERATE Activation Code =========================
+var globalcounter = 0;
+function confirmRecreationAC(rowcounter)
+{
+	globalcounter = rowcounter;
+	$.modal.confirm('Re-setting the activation code should be used cautiously. Once the code is re-set, the old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active. Do you want to continue?', function()
+	{
+		blockUI();
+		var studentBioId = $("#studentBioIdAss"+globalcounter).val();
+		var adminYear = $("#administration"+globalcounter).text();
+		var invitationCode = $("#invitationcode"+globalcounter).text();
+		var data = "studentBioId="+studentBioId+"&adminYear="+adminYear+"&invitationCode="+invitationCode;
+		$.ajax({
+			type : "GET",
+			url : "regenerateActivationCode.do",
+			data : data,
+			dataType : 'json',
+			cache:false,
+			success : function(data) {
+				$("#studentModal").closeModal();
+				openModalToViewAssessments(studentBioId);
+				regenerateAC=true;
+				unblockUI();
+			},
+			error : function(data) {
+				$.modal.alert(strings['script.common.error1']);
+				unblockUI();
+			}
+		});
+
+	}, function()
+	{
+		// do nothing
+	});
+};
 
 //=======================================ENABLING THE SAVE ACTION IN THE VIEW ASSESSMENT RFOW WISE=========================
 	$(".btnSaveViewAssessment").live("click",function(event){

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ctb.prism.core.exception.BusinessException;
 import com.ctb.prism.login.transferobject.UserTO;
@@ -124,5 +126,10 @@ public class ParentServiceImpl implements IParentService {
 	public List<UserTO> getUserNamesByEmail(String emailId)
 	{
 		return parentBusiness.getUserNamesByEmail(emailId);
+	}
+	
+	@Transactional (propagation = Propagation.REQUIRES_NEW)
+	public boolean regenerateActivationCode(StudentTO student) throws Exception {
+		return parentBusiness.regenerateActivationCode(student);
 	}
 }

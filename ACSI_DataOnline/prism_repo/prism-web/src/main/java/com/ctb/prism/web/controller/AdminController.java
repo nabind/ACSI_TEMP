@@ -1650,4 +1650,38 @@ public class AdminController {
 			
 	}	
 	
+	/**
+	 * Method retrieves the organization children when clicked on a organization
+	 * node. This method is called through AJAX
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/regenerateActivationCode", method = RequestMethod.GET)
+	public String regenerateActivationCode(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String studentBioId = request.getParameter("studentBioId");
+			String adminYear = request.getParameter("adminYear");
+			String invitationCode = request.getParameter("invitationCode");
+		
+			StudentTO student = new StudentTO();
+			student.setStudentBioId((studentBioId==null) ? 0 : Long.valueOf(studentBioId));
+			student.setAdminid(adminYear);
+			student.setInvitationcode(invitationCode);
+			
+			boolean success = parentService.regenerateActivationCode(student);
+			String status = (success)? "Success" : "Failed";
+			response.setContentType("text/plain");
+			response.getWriter().write("{\"status\":\"" + status + "\"}");
+
+			
+		} catch (Exception e) {
+			logger.log(IAppLogger.ERROR, e.getMessage(), e);
+		} 
+
+		return null;
+	}
+	
 }
