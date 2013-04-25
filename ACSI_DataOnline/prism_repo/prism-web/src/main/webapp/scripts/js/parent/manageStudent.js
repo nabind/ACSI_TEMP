@@ -201,7 +201,7 @@ var globalcounter = 0;
 function confirmRecreationAC(rowcounter)
 {
 	globalcounter = rowcounter;
-	$.modal.confirm('Re-setting the activation code should be used cautiously. Once the code is re-set, the old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active. Do you want to continue?', function()
+	$.modal.confirm('Re-setting the activation code should be used cautiously. Once the code is re-set, the old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active.<BR> <B>Do you want to continue?</B>', function()
 	{
 		blockUI();
 		var studentBioId = $("#studentBioIdAss"+globalcounter).val();
