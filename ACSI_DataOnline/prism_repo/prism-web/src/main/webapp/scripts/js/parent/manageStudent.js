@@ -178,7 +178,7 @@ function buildAssessmentTableDom(jsonData,modalId,modalContainerDivId)
 		
 	if(regenerateAC) {
 		$("#invitationcode"+globalcounter).addClass("orange-bg");
-		$("#invitationcode"+globalcounter).css('box-shadow', '0 0 30px orange');
+		$("#invitationcode"+globalcounter).css('box-shadow', '0 0 50px orange');
 		$(".createLetter").css('box-shadow', '0 0 15px blue');
 		notify('Activation Code Refreshed', 'The old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active. <br/><br/>Please refresh \'Manage Student\' screen to view updated \'Parent User ID\' column.', {
 			autoClose: true,
@@ -201,10 +201,10 @@ var globalcounter = 0;
 function confirmRecreationAC(rowcounter)
 {
 	globalcounter = rowcounter;
-	$.modal.confirm('Re-setting the activation code should be used cautiously. Once the code is re-set, the old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active.<BR> <B>Do you want to continue?</B>', function()
+	$.modal.confirm('Re-setting the activation code should be used cautiously. Once the code is re-set, the old activation code will no longer be linked to that student\'s results. Parents and family will no longer be able to view results, although the account is still active. Do you want to continue?', function()
 	{
 		blockUI();
-		var studentBioId = $("#studentBioIdAss"+globalcounter).val();
+		studentBioId = $("#studentBioIdAss"+globalcounter).val();
 		var adminYear = $("#administration"+globalcounter).text();
 		var invitationCode = $("#invitationcode"+globalcounter).text();
 		var data = "studentBioId="+studentBioId+"&adminYear="+adminYear+"&invitationCode="+invitationCode;
@@ -216,9 +216,12 @@ function confirmRecreationAC(rowcounter)
 			cache:false,
 			success : function(data) {
 				$("#studentModal").closeModal();
-				openModalToViewAssessments(studentBioId);
+				setTimeout(function() {
+				    openModalToViewAssessments(studentBioId);
+				}, 3000);
+				
 				regenerateAC=true;
-				unblockUI();
+				//unblockUI();
 			},
 			error : function(data) {
 				$.modal.alert(strings['script.common.error1']);
