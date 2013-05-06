@@ -123,7 +123,8 @@ public class CommonController extends BaseDAO {
 			LdapUserDetailsImpl userDetails = (LdapUserDetailsImpl) auth.getPrincipal();
 			String currentOrg = (String) req.getSession().getAttribute(IApplicationConstants.CURRORG);
 			
-			if(userType != null && userType.equals(currentOrg)) {
+			//if(userType != null &&  userType.equals(currentOrg)) {
+			if(userType != null && (userType.equals("00000") || userType.equals(currentOrg))) {
 				File file = null;
 				file = new File(fileName);
 		
