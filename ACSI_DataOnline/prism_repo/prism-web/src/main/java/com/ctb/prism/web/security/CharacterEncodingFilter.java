@@ -64,7 +64,12 @@ public class CharacterEncodingFilter implements Filter {
 			}
 
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-			CharsetEncodingResponseWrapper responseWrapper = new CharsetEncodingResponseWrapper(httpServletResponse, encoding);
+			// Fixed defect 73561 - Block back button
+			httpServletResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+			httpServletResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+			httpServletResponse.setDateHeader("Expires", 0); // Proxies.
+
+			CharsetEncodingResponseWrapper responseWrapper = new CharsetEncodingResponseWrapper(httpServletResponse, encoding);		
 	        chain.doFilter(request, responseWrapper);
 		}	
 	}

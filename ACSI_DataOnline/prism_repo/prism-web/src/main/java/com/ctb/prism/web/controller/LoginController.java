@@ -121,6 +121,21 @@ public class LoginController{
 			  logger.log(IAppLogger.ERROR, "Session Expired");
 			  message = "error.login.sessionexpired";
 		  } else {
+			  //Fixed defect 73561
+			  String currentOrg = (String) request.getSession().getAttribute(IApplicationConstants.CURRORG);
+			  if (currentOrg == null) {
+				  logger.log(IAppLogger.ERROR, "Session Expired");
+				  message = "error.login.sessionexpired";
+				  
+				  ModelAndView modelAndView = null;
+				  modelAndView = new ModelAndView("user/userlogin");
+				  modelAndView.addObject("message", message);
+				 
+				  logger.log(IAppLogger.INFO,
+							"Exit: LoginController - loadLoginPage");
+				  return modelAndView;
+				 // response.sendRedirect("userlogin.do");
+			  }
 			  //this is proper login
 		  }
 		  ModelAndView modelAndView = null;
