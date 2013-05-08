@@ -24,7 +24,7 @@
 			oTable = $('#process').dataTable({
 				"bJQueryUI": true,
 				"sPaginationType": "full_numbers",
-				"aaSorting": [[ 1, "desc" ]],
+				//"aaSorting": [[ 1, "desc" ]],
 				"aoColumnDefs": [ 
 								  { "bSortable": false, "aTargets": [ 0,3,4,12 ] },
 								  { "bVisible": false, "aTargets": [ 0 ] }
