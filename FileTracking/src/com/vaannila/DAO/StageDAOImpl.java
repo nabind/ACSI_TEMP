@@ -35,12 +35,12 @@ public class StageDAOImpl {
 			String query = "SELECT DISTINCT ORG.PROCESSID, ORG.STRUC_ELEMENT, ORG.ORG_LEVEL, ORG.CASE_COUNT, " +
 						       "ORG.STAGE_DATA_STATUS, ORG.STAGE_PDF_STATUS, ORG.TARGET_STATUS, " +
 						       "ORG.TARGET_EMAIL_STATUS, ORG.PROCESS_STATUS, ORG.PROCESS_LOG, ORG.SOURCE_FILENAME, " +
-						       "ORG.UPDATED_DATE_TIME, to_char(ORG.UPDATED_DATE_TIME, 'MM/DD/YYYY'), " +
+						       "ORG.UPDATED_DATE_TIME, to_char(ORG.UPDATED_DATE_TIME, 'MM/DD/YYYY HH24:MI:SS'), " +
 						       "node.level3_element_name, node.level3_customer_codes, ORG.LOGIN_PDF_LOC, ORG.LETTER_PDF_LOC " +
 						  "FROM ORG_PROCESS_STATUS ORG, " +
 						       "stg_org_node node " +
 						  "WHERE node.processid (+) = org.processid and org.adminid = ? " +       
-						 "ORDER BY org.UPDATED_DATE_TIME";
+						 "ORDER BY ORG.PROCESSID DESC";
 			
 			pstmt = conn.prepareCall(query);
 			pstmt.setString(1, adminid);
@@ -94,7 +94,7 @@ public class StageDAOImpl {
 			String query = "SELECT DISTINCT ORG.PROCESSID, ORG.STRUC_ELEMENT, ORG.ORG_LEVEL, ORG.CASE_COUNT, " +
 						       "ORG.STAGE_DATA_STATUS, ORG.STAGE_PDF_STATUS, ORG.TARGET_STATUS, " +
 						       "ORG.TARGET_EMAIL_STATUS, ORG.PROCESS_STATUS, ORG.PROCESS_LOG, ORG.SOURCE_FILENAME, " +
-						       "ORG.UPDATED_DATE_TIME, to_char(ORG.UPDATED_DATE_TIME, 'MM/DD/YYYY'), " +
+						       "ORG.UPDATED_DATE_TIME, to_char(ORG.UPDATED_DATE_TIME, 'MM/DD/YYYY HH24:MI:SS'), " +
 						       "node.level3_element_name, node.level3_customer_codes, ORG.LOGIN_PDF_LOC, ORG.LETTER_PDF_LOC " +
 						  "FROM ORG_PROCESS_STATUS ORG, " +
 						       "stg_org_node node " +
@@ -146,7 +146,7 @@ public class StageDAOImpl {
 			}
 			
 			
-			queryBuff.append("ORDER BY UPDATED_DATE_TIME");
+			queryBuff.append("ORDER BY ORG.PROCESSID DESC");
 			
 			pstmt = conn.prepareCall(queryBuff.toString());
 			
