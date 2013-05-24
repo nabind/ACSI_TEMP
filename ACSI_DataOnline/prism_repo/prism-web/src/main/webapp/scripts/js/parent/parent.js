@@ -153,16 +153,12 @@ $(document).ready(function() {
 			//getChildList();
 		} 
 		else if(step == 1) {//2
+		
 			CheckUserNameAvailability("input#username");
 			//$("#registrationForm").validationEngine('hide');
 			//removePromptOnBack();
 		}
 		else if(step == 2) {//3
-			if($("input#.ABC").length>0) {
-				$.modal.alert(strings['script.user.duplicateUserName'])
-				stepBack(1);
-			}
-			
 			//$("#registrationForm").validationEngine('hide');
 			//validatePwd($("#registrationForm input#password"),$("#registrationForm input#username"),$("#registrationForm"));
 			//removePromptOnBack();
@@ -297,6 +293,49 @@ $(document).ready(function() {
 		});	
 		
 	}
+	
+	function checkUserOnNext(fieldId, form, next, previous, step, fieldset) {
+		$("#imgHolder").find("span").remove();
+		var pattern = /^[0-9a-zA-Z]+$/g;
+	    var username = "username=" + $(fieldId).val();
+		if($(fieldId).val().replace(/ /g,'').length > 0 && pattern.test($(fieldId).val())) {
+		 //showLoadingImage();
+		 blockUI();
+		  $.ajax({
+				type : "GET",
+				url : "regn/checkusername.do",
+				data : username,
+				dataType : 'json',
+				cache:false,
+				success : function(data) {
+					unblockUI();
+					//alert(data.available);
+					if (data.available == "true") {
+						if(next) {
+							form.showWizardNextStep();
+						}
+						else {
+							form.showConditionalWizardStep(form, previous, step, fieldset);
+						}
+						return true;
+					}
+					else if (data.available == "false") {
+						removeLoadingImage();
+						showUnAvailability();
+						$("html, body").animate({ scrollTop: 0 }, "slow");
+						return false;
+					}
+				},
+				error : function(data) {						
+					unblockUI();
+					showUnAvailability();
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					return false;
+				}
+			});
+		}
+	}
+	
 	//Show Loading image
 	function showLoadingImage(){
 	   $("span#imgHolder").html('<img src="themes/acsi/img/standard/loaders/loading16.gif">');	
@@ -307,26 +346,19 @@ $(document).ready(function() {
 	}
 	//Show if userName is available	
 	function showAvailability(){
-		$("span#imgHolder").html('<span id="validated" class="validated" style="color: green;">Username available.</span>');	
-		//$("button.wizard-next").removeAttr("disabled"); 
-		$("input#username").removeClass("ABC");
+		$("span#imgHolder").html('<span id="validated" class="validated" style="color: green;">Username available.</span>');			
 	}
 	//Show if userName is not available	
 	function showUnAvailability(){
 		$("span#imgHolder").html('<span class="" style="color: red;">Username already present. Please choose other.</span>');
-		//$("button.wizard-next").attr("disabled", "disabled");
-		$("input#username").addClass("ABC");
 	}
-	
-
-	
 	//Remove the alert prompt of User Profile
 	function removePromptOnBack()
 	{
 			$("button.wizard-previous").click(function(){
 			$(".formErrorContent").remove();
 			$(".formErrorArrow").remove();
-			
+		
 		});
 	}
 	
@@ -539,11 +571,7 @@ $(document).ready(function() {
 	$("button.wizard-previous").live("click",function(){
 		$("#registrationForm").validationEngine('hide');
 		$("#changePasswordFrom").validationEngine('hide');
-		//$("button.wizard-next").removeAttr("disabled"); 
 	});
-	
-
-	
 	//=======================DISABLES THE ERROR PROMTS WHILE TRAVERSING BACK CLICKING THE WIZARD TABS==============
 	$("ul.wizard-steps li.completed").live("click",function(e){
 			//e.stopImmediatePropagation();

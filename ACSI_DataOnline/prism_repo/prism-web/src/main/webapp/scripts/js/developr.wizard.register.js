@@ -256,19 +256,41 @@
 			{
 				return;
 			}
-			previous.trigger('wizardleave');
-
-			// Set as active
-			step.addClass('active');
-			fieldset.addClass('active').trigger('wizardenter');
-
-			// Previously active section
-			step.siblings('.active').removeClass('active');
-			previous.removeClass('active');
-
-			// Form event
-			form.trigger('wizardchange');
+			
+			if($('li.active > .wizard-step').text() != 3 && !force) {
+				previous.trigger('wizardleave');
+				
+				// Set as active
+				step.addClass('active');
+				fieldset.addClass('active').trigger('wizardenter');
+	
+				// Previously active section
+				step.siblings('.active').removeClass('active');
+				previous.removeClass('active');
+	
+				// Form event
+				form.trigger('wizardchange');
+			} else {
+				checkUserOnNext("input#username", form, false, previous, step, fieldset);
+				
+			}
 		});
+	};
+	
+	$.fn.showConditionalWizardStep = function(form, previous, step, fieldset)
+	{
+		previous.trigger('wizardleave');
+		
+		// Set as active
+		step.addClass('active');
+		fieldset.addClass('active').trigger('wizardenter');
+
+		// Previously active section
+		step.siblings('.active').removeClass('active');
+		previous.removeClass('active');
+
+		// Form event
+		form.trigger('wizardchange');
 	};
 
 	/**
