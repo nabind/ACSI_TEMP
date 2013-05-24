@@ -153,12 +153,16 @@ $(document).ready(function() {
 			//getChildList();
 		} 
 		else if(step == 1) {//2
-		
 			CheckUserNameAvailability("input#username");
 			//$("#registrationForm").validationEngine('hide');
 			//removePromptOnBack();
 		}
 		else if(step == 2) {//3
+			if($("input#.ABC").length>0) {
+				$.modal.alert(strings['script.user.duplicateUserName'])
+				stepBack(1);
+			}
+			
 			//$("#registrationForm").validationEngine('hide');
 			//validatePwd($("#registrationForm input#password"),$("#registrationForm input#username"),$("#registrationForm"));
 			//removePromptOnBack();
@@ -303,19 +307,26 @@ $(document).ready(function() {
 	}
 	//Show if userName is available	
 	function showAvailability(){
-		$("span#imgHolder").html('<span id="validated" class="validated" style="color: green;">Username available.</span>');			
+		$("span#imgHolder").html('<span id="validated" class="validated" style="color: green;">Username available.</span>');	
+		//$("button.wizard-next").removeAttr("disabled"); 
+		$("input#username").removeClass("ABC");
 	}
 	//Show if userName is not available	
 	function showUnAvailability(){
 		$("span#imgHolder").html('<span class="" style="color: red;">Username already present. Please choose other.</span>');
+		//$("button.wizard-next").attr("disabled", "disabled");
+		$("input#username").addClass("ABC");
 	}
+	
+
+	
 	//Remove the alert prompt of User Profile
 	function removePromptOnBack()
 	{
 			$("button.wizard-previous").click(function(){
 			$(".formErrorContent").remove();
 			$(".formErrorArrow").remove();
-		
+			
 		});
 	}
 	
@@ -528,7 +539,11 @@ $(document).ready(function() {
 	$("button.wizard-previous").live("click",function(){
 		$("#registrationForm").validationEngine('hide');
 		$("#changePasswordFrom").validationEngine('hide');
+		//$("button.wizard-next").removeAttr("disabled"); 
 	});
+	
+
+	
 	//=======================DISABLES THE ERROR PROMTS WHILE TRAVERSING BACK CLICKING THE WIZARD TABS==============
 	$("ul.wizard-steps li.completed").live("click",function(e){
 			//e.stopImmediatePropagation();
