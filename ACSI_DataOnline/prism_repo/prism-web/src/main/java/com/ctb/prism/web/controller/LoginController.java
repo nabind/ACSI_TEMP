@@ -122,7 +122,7 @@ public class LoginController{
 			  message = "error.login.sessionexpired";
 		  } else {
 			  //Fixed defect 73561
-			  String currentUser = (String) request.getSession().getAttribute(IApplicationConstants.CURRUSER);;
+			  String currentUser = (String) request.getSession().getAttribute(IApplicationConstants.CURRUSER);
 			  if (currentUser == null) {
 				  logger.log(IAppLogger.INFO, "Landing Page loaded");
 				 
