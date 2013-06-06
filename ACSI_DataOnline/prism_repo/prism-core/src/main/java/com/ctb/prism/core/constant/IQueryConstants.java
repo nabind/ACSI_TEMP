@@ -1083,7 +1083,7 @@ public interface IQueryConstants {
     
     public static final String ADD_NEW_INVITATION_CODE =  CustomStringUtil.appendString(
 			"insert into INVITATION_CODE",
-				  " select NVITATION_CODE_ID_SEQ.Nextval, (select sf_gen_invite_code from DUAL), student_struc_element, total_available_ic_claim, total_attempt_ic_claim, org_nodeid, adminid, invitation_expiration_date, 'AC', created_by_id, sysdate, sysdate, 'N'", 
+				  " select NVITATION_CODE_ID_SEQ.Nextval, (select sf_gen_invite_code from DUAL), student_struc_element, (select parameter_value from PARAMETER_MASTER_LOOKUP where parameter_name = 'TOTAL_AVAILABLE_IC_CLAIM' and rownum = 1), '0', org_nodeid, adminid, invitation_expiration_date, 'AC', created_by_id, sysdate, sysdate, 'N'", 
 				  " from INVITATION_CODE",
 				  " where invitation_code = ? and activation_status = 'AC' AND STUDENT_STRUC_ELEMENT = (SELECT STD.STRUCTURE_ELEMENT  FROM STUDENT_BIO_DIM STD WHERE STD.STUDENT_BIO_ID = ?) ");
 }
