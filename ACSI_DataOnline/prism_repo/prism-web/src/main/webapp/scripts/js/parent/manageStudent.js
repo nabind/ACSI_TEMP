@@ -185,8 +185,8 @@ function buildAssessmentTableDom(jsonData,modalId,modalContainerDivId)
 			closeDelay:10000,
 			delay: 100,
 			showCloseOnHover:false,
-			textOneSimilar:'Activation Code Regenated!',
-			textSeveralSimilars:'Activation Code Regenated!',
+			textOneSimilar:'Activation Code Regenerated!',
+			textSeveralSimilars:'Activation Code Regenerated!',
 			icon: 'themes/acsi/img/demo/icon.png',
 			onDisplay: function() {
 				$(".createLetter").css('box-shadow', '0 0 15px blue');
