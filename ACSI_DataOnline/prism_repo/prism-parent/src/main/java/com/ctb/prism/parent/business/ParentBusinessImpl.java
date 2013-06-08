@@ -49,7 +49,8 @@ public class ParentBusinessImpl implements IParentBusiness {
 		if(parentTO == null) {
 			parentTO = new ParentTO();
 			parentTO.setErrorMsg("IC_INVALID");
-		} else if(parentTO.getTotalAvailableCalim() <= parentTO.getTotalAttemptedCalim()) {
+	//	} else if(parentTO.getTotalAvailableCalim() <= parentTO.getTotalAttemptedCalim()) { // Fixed 74114
+		} else if(parentTO.getTotalAvailableCalim() == 0) {
 			parentTO = new ParentTO();
 			parentTO.setErrorMsg("IC_NOTAVAILABLE");
 		} else if (IApplicationConstants.INACTIVE_FLAG.equals(parentTO.getIcExpirationStatus()) || IApplicationConstants.INACTIVE_FLAG.equals(parentTO.getIcActivationStatus())) {
