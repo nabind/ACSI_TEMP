@@ -48,7 +48,8 @@ public class ExporterService {
 			// Set content type
 			response.setContentType(MEDIA_TYPE_EXCEL);
 			response.setContentLength(baos.size());
-			response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			//response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			response.setHeader("Cache-Control", "private");
 			response.setHeader("Pragma", "public");
 			
 			return response;
@@ -69,7 +70,8 @@ public class ExporterService {
 			// Set content type
 			response.setContentType(MEDIA_TYPE_PDF);
 			response.setContentLength(baos.size());
-			response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			//response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			response.setHeader("Cache-Control", "private");
 			response.setHeader("Pragma", "public");
 			
 			return response;
