@@ -144,8 +144,10 @@ public class XSSFilter implements Filter {
 				, " milli seconds for URL:",url,"\n*****************************************\n"));
 		/* Write content to browser */
 		_res.setContentLength(xssFreeOutputHtml.length());
-		_res.getWriter().print(xssFreeOutputHtml);
-		_res.getWriter().close();
+		if(url != null && url.indexOf("/download.do") == -1) {
+			_res.getWriter().print(xssFreeOutputHtml);
+			_res.getWriter().close();
+		}
 	}
 
 	

@@ -1,6 +1,7 @@
 package com.ctb.prism.report.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.ServletOutputStream;
@@ -58,16 +59,14 @@ public class DownloadService {
 	*/
 	private void write(String token, HttpServletResponse response,
 			ByteArrayOutputStream baos) {
-		 
+		ServletOutputStream outputStream = null;
 		try {
 			logger.debug(baos.size());
 			
 			// Retrieve output stream
-			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream = response.getOutputStream();
 			// Write to output stream
 			baos.writeTo(outputStream);
-			// Flush the stream
-			outputStream.flush();
 			
 			// Remove download token
 			tokenService.remove(token);
@@ -75,6 +74,19 @@ public class DownloadService {
 		} catch (Exception e) {
 			logger.error("Unable to write report to the output stream");
 			throw new RuntimeException(e);
+		} finally {
+			if(baos != null)
+				try { 
+					baos.flush();
+					baos.close(); 
+				} catch (IOException e1) {}
+			if(outputStream != null) {
+				// Flush the stream
+				try { 
+					outputStream.flush();
+					outputStream.close(); 
+				} catch (IOException e) {}
+			}
 		}
 	}
 }

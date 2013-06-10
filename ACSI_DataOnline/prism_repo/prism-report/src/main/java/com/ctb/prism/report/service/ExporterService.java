@@ -41,11 +41,15 @@ public class ExporterService {
 			// Here you can declare a custom filename
 			String fileName = jp.getName().replace(" ", "_");
 			fileName = CustomStringUtil.appendString(fileName, ".", EXTENSION_TYPE_EXCEL);
-			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			//response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+			response.setHeader("Content-Disposition",
+					CustomStringUtil.appendString("attachment; filename=\"", fileName, "\""));
 			
 			// Set content type
 			response.setContentType(MEDIA_TYPE_EXCEL);
 			response.setContentLength(baos.size());
+			response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			response.setHeader("Pragma", "public");
 			
 			return response;
 		}
@@ -58,11 +62,15 @@ public class ExporterService {
 			// Here you can declare a custom filename
 			String fileName = jp.getName().replace(" ", "_");
 			fileName = CustomStringUtil.appendString(fileName, ".", EXTENSION_TYPE_PDF);
-			response.setHeader("Content-Disposition", "attachment; filename="+ fileName);
+			//response.setHeader("Content-Disposition", "attachment; filename="+ fileName);
+			response.setHeader("Content-Disposition",
+					CustomStringUtil.appendString("attachment; filename=\"", fileName, "\""));
 			
 			// Set content type
 			response.setContentType(MEDIA_TYPE_PDF);
 			response.setContentLength(baos.size());
+			response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
+			response.setHeader("Pragma", "public");
 			
 			return response;
 			
